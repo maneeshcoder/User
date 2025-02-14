@@ -1,16 +1,17 @@
 import express from 'express';
 import dotenv from "dotenv";
-import cors from "cors";
 import { login, register, search } from './User.js';
 import { authenticate } from './auth.middileware.js';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 dotenv.config();
+//port
 const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+//database connection
 const connectDB = async () => {
     try {
         await mongoose.connect(process.env.MONGODB_URI);
@@ -29,6 +30,11 @@ app.listen(process.env.PORT,()=>{
 app.get("/",(req,res)=>{
     res.send("hello world")
 })
+//register route
 app.post("/register",register);
+
+//login route
 app.post("/login",login);
+
+//search route
 app.get("/search",authenticate ,search);
